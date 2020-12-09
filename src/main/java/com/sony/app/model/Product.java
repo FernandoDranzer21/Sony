@@ -1,7 +1,13 @@
 package com.sony.app.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+@ApiModel
 public class Product {
+
+    @ApiModelProperty(notes = "name of the user")
     private String id;
+    @ApiModelProperty(allowableValues = "fernando, gordillo, banned")
     private String name;
 
     public String getId() {

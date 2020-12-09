@@ -2,6 +2,10 @@ package com.sony.app.controller;
 
 import com.sony.app.model.Product;
 import com.sony.app.service.ProductService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/v1/")
+@Api(value = "Product Resource REST Endpoint", description = "Simple Products")
 public class ProductoController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductoController.class);
@@ -49,8 +55,9 @@ public class ProductoController {
         return name;
     }
 
-    @RequestMapping(value = "/products")
-    public ResponseEntity<Object> getProduct() {
+
+    @RequestMapping(value = "/products/", method = RequestMethod.GET)
+    public ResponseEntity<Object> getProducts() {
         return new ResponseEntity<>(productService.getProducts(), HttpStatus.OK);
     }
     @RequestMapping(value = "/products/{id}", method = RequestMethod.PUT)
@@ -60,11 +67,15 @@ public class ProductoController {
         return new ResponseEntity<>("Product is updated successsfully", HttpStatus.OK);
     }
     @RequestMapping(value = "/products/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Object> delete(@PathVariable("id") String id) {
+    public ResponseEntity<Object> deleteProduct(@PathVariable("id") String id) {
         productService.deleteProduct(id);
         return new ResponseEntity<>("Product is deleted successsfully", HttpStatus.OK);
     }
-    @RequestMapping(value = "/products", method = RequestMethod.POST)
+    @RequestMapping(value = "/products/", method = RequestMethod.POST)
+    @ApiOperation(value = "Registrar un Producto")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Product is created successfully"),
+            @ApiResponse(code = 413, message = "Ejemplo :v")})
     public ResponseEntity<Object> createProduct(@RequestBody Product product) {
         productService.createProduct(product);
         return new ResponseEntity<>("Product is created successfully", HttpStatus.CREATED);
